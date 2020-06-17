@@ -1,0 +1,133 @@
+/* ================
+// Paths
+// ============= */
+
+$stars: 100;
+$speed: 10;
+
+@function starPath($x) {
+  
+  $starPath: 'm0, 0';
+  
+  @for $i from 1 through 2 {
+    $starPath: 
+      append(
+        $starPath, 
+          's' + ($x / 2 * $i) ($x / -2 * $i ) + ' ' + ($x * $i) (0) 
+          's' + ($x * $i) ($x * $i ) ($x * 2 * $i) (0), 
+          space);
+  }
+  
+  @return('#{$starPath}');
+  
+}
+
+.star {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  animation: 
+    path-offset $speed * 1s infinite linear,
+    star-power $speed * 1s infinite linear; 
+  clip-path:
+    polygon(
+      50% 0%, 
+      61% 35%,
+      98% 35%,
+      68% 57%, 
+      79% 91%, 
+      50% 70%, 
+      21% 91%, 
+      32% 57%, 
+      2% 35%, 
+      39% 35%
+    );
+  mix-blend-mode: soft-light;
+  offset-distance: 0;
+  opacity: 0;
+
+  @for $i from 1 through $stars {
+    $size: random(10) * 1vmin;
+
+    &:nth-child(#{$i}) {
+      height: $size;
+      width: $size;
+      animation-delay: $speed / $stars * $i * 1s;
+      background: lighten(#FFC400, random(25) * 1%);
+      offset-path: path(starPath(random(100) + 100));
+      transform: 
+        translate(-100%, -50%)
+        rotate(random(360) * 1deg)
+        scale(1);
+      
+      @media (min-width: 500px) {
+        offset-path: path(starPath(random(300) + 300));
+      }
+      
+    }
+
+  }
+
+}
+
+@keyframes path-offset {
+  
+  100% {
+    offset-distance: 100%;
+  }
+
+}
+
+@keyframes star-power {
+  
+  10%,
+  90% {
+    opacity: 1;
+  }
+  
+  100% {
+    opacity: 0;
+    transform: 
+      translate(-100%, -50%)
+      rotate(0)
+      scale(0);
+  }
+  
+}
+
+
+/* ================
+// Heading
+// ============= */
+
+h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  font-size: 20vmin;
+  font-weight: normal;
+  transform: translate(-50%, -50%);
+}
+
+
+/* ================
+// Structure
+// ============= */
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  overflow: hidden;
+  font-family: 'Sacramento';
+  background: 
+    radial-gradient(
+      ellipse at center,
+        #051838,
+        #0A093B 100%
+    );
+  color: #fff;
+}
